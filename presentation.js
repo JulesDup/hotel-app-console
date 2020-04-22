@@ -1,8 +1,8 @@
 // récupération des modules externe
-var readline = require("readline");
-var services = require("./services.js");
+const readline = require("readline");
+import { listerClient, ajouterClient } from 'Service'
 // création d'un objet `rl` permettant de récupérer la saisie utilisateur
-var rl = readline.createInterface({
+const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
@@ -20,22 +20,22 @@ function saisie() {
       case '1':
         console.log("\nListe des clients : ");
 
-        services.listerClient(function (Clients) {
+        listerClient().then(Clients => {
           console.log(Clients);
           start();
-        }, function (error) {
-          console.log("\nErreur : " + error + "\n");
+        }).catch(error => {
+          console.log(`\nErreur :  ${error} \n`);
           start();
         });
         break;
       case '2':
-        rl.question("Nom du client : ", function (nom) {
-          rl.question("Prenom du client : ", function (prenom) {
-            services.ajouterClient(nom, prenom, function (message) {
-              console.log("\n" + message + "\n");
+        rl.question("Nom du client : ", nom => {
+          rl.question("Prenom du client : ", prenom => {
+            ajouterClient(nom, prenom).then(message => {
+              console.log(`\n ${message} \n`);
               start();
-            }, function (error) {
-              console.log("\nErreur : " + error + "\n");
+            }).catch(error => {
+              console.log(`\nErreur : ${error} \n`);
               start();
             });
           });
